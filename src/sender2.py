@@ -13,6 +13,7 @@ pi.set_mode(22, pigpio.INPUT)
 pi.set_mode(24, pigpio.INPUT)
 pi.set_mode(26, pigpio.INPUT)
 
+#turns all of the transmit lights off
 def lightsOut():
     pi.write(21, pigpio.LOW)
     pi.write(23, pigpio.LOW)
@@ -26,16 +27,20 @@ def lightsOn():
     pi.write(25, pigpio.HIGH)
     pi.write(27, pigpio.HIGH)
 
-def nic_receive():
-    output = ""
-    for i in "000000000000000000000000000000000":
-        iin = pi.read(26)
-        output = output + str(iin)
+def nic_send(message):
+    for element in message:
+        if element == "1":
+            lightsOn()
+            time.sleep(0.1)
+        else:
+            lightsOut()
+            time.sleep(0.1)
 
-    return output
 lightsOut()
-if pi.wait_for_edge(26, pigpio.FALLING_EDGE, 10):
-    lightsOn()
-    print("light received")
+broadcastPacket = "10000000000000000000000000000000"
+nic_send(broadcastPacket)
+signalval = pi.read(26)
+if signalval == 1:
+    print("signal on")
 else:
-    print("Timed out - no broadcast packet registered")
+    print("signal off")
