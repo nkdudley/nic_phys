@@ -1,24 +1,33 @@
 class Packet:
-	def __init__(self, size, number, address, message):
-		self.size = size
-		self.number = number
-		self.address = address
-		self.message = message
+	def __init__(self, binary_string):
+		self.binary_string = binary_string
+		self.message = binary_string[0:16]
+		self.address = binary_string[16:20]
+		self.number = binary_string[20:26]
+		self.size = binary_string[26:32]
+	
+	def decode(self):
+		message = str(binToChars(self.message))
+		address = str(binToInt(self.address))
+		number = str(binToInt(self.number))
+		size = str(binToInt(self.size))
+		return message+" "+address+" "+number+" "+size
 
-	def getBinString(self):
-		return (charsToBin(self.message)+
-			intToBin(self.address,3)+
-			intToBin(self.number,6)+
-			intToBin(self.size,6))
-
-	def getMessage(self):
-		return self.message
+def encode(message, address, number, size):
+	binary_string = charsToBin(message)
+	binary_string += intToBin(address,4)
+	binary_string += intToBin(number,6)
+	binary_string += intToBin(size,6)
+	return binary_string	
 
 def intToBin(num, length):
-	b = bin(int(num)).replace("0b","")
+	b = bin(num).replace("0b","")
 	for i in range(0,length-len(b)):
 		b = '0'+b
 	return b
+
+def binToInt(num):
+	return int(num,2)
 	
 def charsToBin(chars):
 	message=""
@@ -36,18 +45,15 @@ def charsToBin(chars):
 
 def binToChars(binary):
 	input_value = int(binary,2)
-	input_bytes = input_value.to_bytes(2, "big")
+	total_bytes = (input_value.bit_length()+7)//8
+	input_bytes = input_value.to_bytes(total_bytes, "big")
 	ASCII_value = input_bytes.decode()
 	return ASCII_value
 
-"""
-Currently the characters are being represented by 7 bits
-and must be represented by 4 bits before being passed to to_bytes()
-"""
-
-test = Packet(input("number of packets(1-63):"),
-	input("packet number(1-63):"),
-	input("address(0-7):"),
-	input("message(2 chars):"))
-print("binary string:",test.getBinString())
-print("message:",test.getMessage())
+message = input("Enter a message(2 chars):")
+address = int(input("Enter an address(1-16):"))-1
+number = int(input("Enter the packet number(1-64):"))-1
+size = int(input("Enter the number of packets(1-64):"))-1
+test = Packet(encode(message,address,number,size))
+print("Encoded: "+test.binary_string)
+print("Decoded: "+test.decode())
