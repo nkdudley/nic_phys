@@ -11,22 +11,8 @@ class receive:
         self.pi.set_mode(24, pigpio.INPUT)
         self.pi.set_mode(26, pigpio.INPUT)
 
-    #turns all of the transmit lights off
-    def lightsOut(self):
-        self.pi.write(21, pigpio.LOW)
-        self.pi.write(23, pigpio.LOW)
-        self.pi.write(25, pigpio.LOW)
-        self.pi.write(27, pigpio.LOW)
-
-    #turns all the transmit leds on
-    def lightsOn(self):
-        self.pi.write(21, pigpio.HIGH)
-        self.pi.write(23, pigpio.HIGH)
-        self.pi.write(25, pigpio.HIGH)
-        self.pi.write(27, pigpio.HIGH)
-
     def nic_receive(self, tick):
-        time.sleep(tick/2)
+        time.sleep(tick*1.5)
         output = ""
         for i in range(0, 8):
             bit = self.pi.read(26)
@@ -37,6 +23,7 @@ class receive:
 
     def start_receive(self, tick):
         while 1 == 1:
+            print("waiting")
             self.pi.wait_for_edge(26, pigpio.RISING_EDGE)
             msg = self.nic_receive(tick)
             print(msg)

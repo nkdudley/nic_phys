@@ -12,11 +12,6 @@ class send:
         self.pi.set_mode(25, pigpio.OUTPUT)
         self.pi.set_mode(27, pigpio.OUTPUT)
 
-        # self.pi.set_mode(20, pigpio.INPUT)
-        # self.pi.set_mode(22, pigpio.INPUT)
-        # self.pi.set_mode(24, pigpio.INPUT)
-        # self.pi.set_mode(26, pigpio.INPUT)
-
     #turns all of the transmit lights off
     def lightsOut(self):
         self.pi.write(21, pigpio.LOW)
@@ -44,11 +39,11 @@ class send:
         self.lightsOut()
 
     def start_send(self, tick):
-        input = input("enter a number 0 -255 or quit to exit: ")
-        while input != "quit":
-            binmsg = bin(int(input))
+        num = input("enter a number 0 - 255 or quit to exit: ")
+        while num != "quit":
+            binmsg = bin(int(num))
             msg = binmsg.replace("0b", "")
             self.nic_send(msg, tick)
-            input = input("enter a number 0 -255 or quit to exit: ")
-        print("exiting")
+            num = input("enter a number 0 - 255 or quit to exit: ")
+        print("exiting...")
         exit(1)
