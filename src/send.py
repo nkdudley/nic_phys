@@ -27,7 +27,10 @@ class send:
         self.pi.write(27, pigpio.HIGH)
 
     def nic_send(self, msg, tick):
+        print(msg)
         self.lightsOn()
+        time.sleep(tick)
+        self.lightsOut()
         time.sleep(tick)
         for element in msg:
             if element == "1":
@@ -43,7 +46,10 @@ class send:
         while num != "quit":
             binmsg = bin(int(num))
             msg = binmsg.replace("0b", "")
+            for _ in range(0, 8-len(msg)):
+                msg = "0" + msg
             self.nic_send(msg, tick)
             num = input("enter a number 0 - 255 or quit to exit: ")
         print("exiting...")
         exit(1)
+

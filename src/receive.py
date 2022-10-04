@@ -18,12 +18,14 @@ class receive:
             bit = self.pi.read(26)
             time.sleep(tick)
             output += str(bit)
-
+        print("received")
         return output
 
     def start_receive(self, tick):
         while 1 == 1:
             print("waiting")
+            print(self.pi.read(26))
             self.pi.wait_for_edge(26, pigpio.RISING_EDGE)
+            self.pi.wait_for_edge(26, pigpio.FALLING_EDGE)
             msg = self.nic_receive(tick)
             print(msg)
