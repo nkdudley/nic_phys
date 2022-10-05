@@ -35,12 +35,10 @@ def binToInt(num):
 	return int(num,2)
 	
 def charsToBin(chars):
-        if len(chars) < 1:
+        if len(chars) < 1 | len(chars) > 2:
                 chars = "  "
         if len(chars) == 1:
                 chars += ' '
-        if len(chars) > 2:
-                chars = "  "
         message = ""
         a1 = ord(chars[0])
         a2 = ord(chars[1])
@@ -62,14 +60,14 @@ def binToChars(binary):
 	return ASCII_value
 
 """
-Tests the creation of one Packet from user input
+#Tests the creation of one Packet from user input
 
 message = input("Enter a message(2 chars):")
-address = input("Enter an address(1-16):"))-1
-number = input("Enter the packet number(1-64):"))-1
-size = input("Enter the number of packets(1-64):"))-1
+address = input("Enter an address(0-15):")
+number = input("Enter the packet number(0-63):")
+size = input("Enter the number of packets(1-63):")
 test = Packet(encode(message,address,number,size))
 print("Encoded: "+test.binary_string)
-print("Decoded: "+test.decode())
+print("Message: "+test.getMessage())
 """
 
