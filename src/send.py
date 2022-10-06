@@ -29,7 +29,12 @@ class send:
         self.pi.write(27, pigpio.HIGH)
 
     def nic_send(self, msg):
+<<<<<<< HEAD
         print("sending: " + msg)
+=======
+        time1 = time.time_ns()
+        print("sending: "+msg)
+>>>>>>> 28fff426e5ee9af7f139d1c9312513c3ee0370f1
         self.lightsOn()
         time.sleep(self.tick)
         self.lightsOut()
@@ -41,10 +46,12 @@ class send:
             else:
                 self.lightsOut()
                 time.sleep(self.tick)
-
+        time2 = time.time_ns()
+        duration = time2-time1
+        print("time elapsed: "+duration)
         self.lightsOut()
 
-    def start_send(self):
+    def start_send(self, callback):
         num = input("enter a number 0 - 255 or quit to exit: ")
         while num != "quit":
             binmsg = bin(int(num))
@@ -57,5 +64,6 @@ class send:
             self.nic_send(msg)
             num = input("enter a number 0 - 255 or quit to exit: ")
         print("exiting...")
+        callback.cancel()
         exit(1)
 

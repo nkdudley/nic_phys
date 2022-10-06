@@ -13,6 +13,7 @@ class receive:
 
         self.tick = 0.1
 
+<<<<<<< HEAD
     def initCallback(self):
         func = self.pi.callback(26, pigpio.FALLING_EDGE, self.cbf)
         return func
@@ -24,14 +25,21 @@ class receive:
         self.nic_receive()
 
 
+=======
+>>>>>>> 28fff426e5ee9af7f139d1c9312513c3ee0370f1
     def nic_receive(self):
+        time1 = time.time_ns()
         time.sleep(self.tick*1.5)
         output = ""
         for i in range(0, 8):
             bit = self.pi.read(26)
-            time.sleep(self.tick)
             output += str(bit)
+            time.sleep(self.tick)
+
+        time2 = time.time_ns()
+        duration = time2-time1
         print("received: " + output)
+        print("time elapsed: "+duration)
         return output
 
     def start_receive(self):
