@@ -29,7 +29,8 @@ class send:
         self.pi.write(27, pigpio.HIGH)
 
     def nic_send(self, msg):
-        print(msg)
+        time1 = time.time_ns()
+        print("sending: "+msg)
         self.lightsOn()
         time.sleep(self.tick)
         for element in msg:
@@ -39,7 +40,9 @@ class send:
             else:
                 self.lightsOut()
                 time.sleep(self.tick)
-
+        time2 = time.time_ns()
+        duration = time2-time1
+        print("time elapsed: "+duration)
         self.lightsOut()
 
     def start_send(self, callback):
