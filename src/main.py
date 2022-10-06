@@ -2,23 +2,38 @@ import send
 import receive
 import pigpio
 import time
-import threading
 
 sender = send.send()
 receiver = receive.receive()
 
+def initCallback():
+    func = receiver.pi.callback(26, pigpio.RISING_EDGE, cbf)
+    return func
+
+def cbf(gpio, level, tick):
+    global cb1
+    cb1.cancel()
+    print("cancelled")
+    receiver.nic_receive()
+    cb1 = initCallback()
 
 #do handshake
 sender.lightsOn()
-time.sleep(0.01)
+time.sleep(0.1)
 sender.lightsOut()
-#if(receiver.pi.read(26) == 0):
-#    sender.pi.wait_for_edge(26, pigpio.RISING_EDGE)
+time.sleep(0.1)
+sender.lightsOn()
 
-thread1 = threading.Thread(target=sender.start_send, args=[.1])
-thread2 = threading.Thread(target=receiver.start_receive, args=[.1])
+print("looking for the other machine...")
+if(receiver.pi.read(26) == 0):
+    sender.pi.wait_for_edge(26, pigpio.RISING_EDGE)
 
-thread1.start()
-thread2.start()
+print("machine found!")
+sender.lightsOut()
+time.sleep(1)
 
-
+#start progtam
+cb1 = initCallback()
+sender.start_send()
+time.sleep(120)
+cb1.cancel()
