@@ -13,14 +13,12 @@ class receive:
 
         self.tick = 0.1
 
-
-
     def nic_receive(self):
         time.sleep(self.tick*1.5)
         output = ""
         for i in range(0, 8):
             bit = self.pi.read(26)
-            time.sleep(self.tick)
             output += str(bit)
+            time.sleep(self.tick)
         print("received: " + output)
         return output

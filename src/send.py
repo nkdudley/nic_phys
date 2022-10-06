@@ -42,7 +42,7 @@ class send:
 
         self.lightsOut()
 
-    def start_send(self):
+    def start_send(self, callback):
         num = input("enter a number 0 - 255 or quit to exit: ")
         while num != "quit":
             binmsg = bin(int(num))
@@ -55,5 +55,6 @@ class send:
             self.nic_send(msg)
             num = input("enter a number 0 - 255 or quit to exit: ")
         print("exiting...")
+        callback.cancel()
         exit(1)
 
