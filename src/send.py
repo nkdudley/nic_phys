@@ -29,8 +29,10 @@ class send:
         self.pi.write(27, pigpio.HIGH)
 
     def nic_send(self, msg):
-        print(msg)
+        print("sending: " + msg)
         self.lightsOn()
+        time.sleep(self.tick)
+        self.lightsOut()
         time.sleep(self.tick)
         for element in msg:
             if element == "1":

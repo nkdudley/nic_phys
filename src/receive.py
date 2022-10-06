@@ -13,6 +13,15 @@ class receive:
 
         self.tick = 0.1
 
+    def initCallback(self):
+        func = self.pi.callback(26, pigpio.FALLING_EDGE, self.cbf)
+        return func
+
+    def cbf(self, gpio, level, tick):
+        global cb1
+        cb1.cancel()
+        print("cancelled")
+        self.nic_receive()
 
 
     def nic_receive(self):
@@ -24,3 +33,9 @@ class receive:
             output += str(bit)
         print("received: " + output)
         return output
+
+    def start_receive(self):
+        while True:
+            self.pi.wait_for_edge(26, pigpio.RISING_EDGE)
+            cp1 = self.initCallback()
+            time.sleep(1)
