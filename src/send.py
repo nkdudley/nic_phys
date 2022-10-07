@@ -12,7 +12,7 @@ class send:
         self.pi.set_mode(25, pigpio.OUTPUT)
         self.pi.set_mode(27, pigpio.OUTPUT)
 
-        self.tick = 0.1
+        self.tick = 0.07
 
     #turns all the transmitting lights off
     def lightsOut(self):
@@ -30,6 +30,8 @@ class send:
 
     def nic_send(self, msg):
         print("sending: " + msg)
+        self.lightsOut()
+        time.sleep(self.tick)
         self.lightsOn()
         time.sleep(self.tick)
         self.lightsOut()
@@ -55,6 +57,7 @@ class send:
                 msg = "0" + msg
 
             self.nic_send(msg)
+            time.sleep(self.tick)
             num = input("enter a number 0 - 255 or quit to exit: ")
         print("exiting...")
         exit(1)

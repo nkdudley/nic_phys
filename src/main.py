@@ -7,7 +7,6 @@ import threading
 sender = send.send()
 receiver = receive.receive()
 
-
 #do handshake
 sender.lightsOn()
 time.sleep(0.1)
@@ -22,14 +21,13 @@ print("machine found!")
 
 time.sleep(1)
 sender.lightsOut()
+time.sleep(1)
 
 thread1 = threading.Thread(target=receiver.start_receive())
 thread2 = threading.Thread(target=sender.start_send())
 
 thread1.start()
 thread2.start()
-
-
 
 # #start progtam
 # cb1 = initCallback()

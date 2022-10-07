@@ -11,7 +11,7 @@ class receive:
         self.pi.set_mode(24, pigpio.INPUT)
         self.pi.set_mode(26, pigpio.INPUT)
 
-        self.tick = 0.1
+        self.tick = 0.07
 
     def initCallback(self):
         func = self.pi.callback(26, pigpio.FALLING_EDGE, self.cbf)
@@ -38,4 +38,4 @@ class receive:
         while True:
             self.pi.wait_for_edge(26, pigpio.RISING_EDGE)
             cp1 = self.initCallback()
-            time.sleep(1)
+            time.sleep(self.tick*40)
